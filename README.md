@@ -23,3 +23,10 @@ Interfaz simple y accesible para todas las edades.
 🎯 Objetivo
 
 Mejorar la calidad de vida de cuidadores y personas dependientes, fomentando autonomía, reduciendo el estrés y asegurando el cumplimiento de rutinas de salud y bienestar.
+
+# Integrantes
+
+  - BÁRBARA ALEJANDRA ARRIAGADA AZÓCAR
+  - ELSA MAGDALENA DURÁN CATRIÁN
+  - CATALINA ISABEL DURAN CORI
+  - GUSTAVO EDUARDO ROSA ROSA
