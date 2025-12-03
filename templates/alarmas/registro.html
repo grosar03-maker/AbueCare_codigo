@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card registro-card">
+        <h2>📝 Crear Cuenta</h2>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>👤 Nombre:</label>
+                <input type="text" name="nombre" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>👥 Apellido:</label>
+                <input type="text" name="apellido" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>📧 Correo Electrónico:</label>
+                <input type="email" name="email" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>🔒 Contraseña:</label>
+                <input type="password" name="contraseña" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>🔒 Confirmar Contraseña:</label>
+                <input type="password" name="confirmar_contraseña" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-large">✓ Registrarse</button>
+        </form>
+
+        <div class="auth-links">
+            <p>¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

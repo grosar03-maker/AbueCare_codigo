@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABUECARE - Cuidado de Personas Mayores</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <span class="logo">⏰</span>
+                <h1>ABUECARE</h1>
+            </div>
+            <div class="nav-menu">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="nav-link">🏠 Inicio</a>
+                    
+                    <a href="#" class="nav-link" 
+                       data-url="{% url 'recordatorio_create' %}" 
+                       onclick="abrirRecordatorio(event, this.getAttribute('data-url'))">
+                       ➕ Nueva Alarma
+                    </a>
+
+                    <a href="#" class="nav-link">👤 Mi Perfil</a>
+                    <a href="{% url 'logout' %}" class="nav-link">🚪 Cerrar Sesión</a>
+                {% else %}
+                    <a href="#" class="nav-link" onclick="abrirLogin(event)">🔐 Iniciar Sesión</a>
+                    <a href="#" class="nav-link" onclick="abrirRegistro(event)">📝 Registrarse</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>💙 Diseñado con amor para el cuidado de personas mayores</p>
+            <p>© 2024 ABUECARE - Sistema de Alarmas Inteligentes</p>
+        </div>
+    </footer>
+
+    <div id="modalLogin" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="cerrar" onclick="cerrarLogin()">&times;</span>
+                <h2 class="modal-title">🔐 Iniciar sesión</h2>
+            </div>
+            <form id="formLogin" method="POST" action="{% url 'login' %}" class="auth-form modal-auth">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>📧 Correo o Usuario</label>
+                    <input type="text" name="username" class="form-control" required placeholder="Correo o usuario">
+                </div>
+                <div class="form-group">
+                    <label>🔒 Contraseña</label>
+                    <input type="password" name="password" class="form-control" required placeholder="Contraseña">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-large">🚀 Iniciar sesión</button>
+                </div>
+                <p class="small-note">¿No tienes cuenta? <a href="#" onclick="cerrarLogin(); abrirRegistro(event)">Regístrate</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalRegistro" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="cerrar" onclick="cerrarRegistro()">&times;</span>
+                <h2 class="modal-title">📝 Crear cuenta</h2>
+            </div>
+            <form id="formRegistro" method="POST" action="{% url 'registro' %}" class="auth-form modal-auth">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>👤 Nombre</label>
+                    <input type="text" name="nombre" class="form-control" required placeholder="Nombre">
+                </div>
+                <div class="form-group">
+                    <label>👥 Apellido</label>
+                    <input type="text" name="apellido" class="form-control" required placeholder="Apellido">
+                </div>
+                <div class="form-group">
+                    <label>📧 Correo electrónico</label>
+                    <input type="email" name="email" class="form-control" required placeholder="correo@ejemplo.com">
+                </div>
+                <div class="form-group">
+                    <label>🔒 Contraseña</label>
+                    <input type="password" name="contraseña" class="form-control" required placeholder="Contraseña (min. 6 caracteres)">
+                </div>
+                <div class="form-group">
+                    <label>🔒 Confirmar contraseña</label>
+                    <input type="password" name="confirmar_contraseña" class="form-control" required placeholder="Confirmar contraseña">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-large">✓ Registrarse</button>
+                </div>
+                <p class="small-note">¿Ya tienes cuenta? <a href="#" onclick="cerrarRegistro(); abrirLogin(event)">Inicia sesión</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="modalRecordatorio" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="cerrar" onclick="cerrarRecordatorio()">&times;</span>
+                <h2 class="modal-title">📌 Nuevo recordatorio</h2>
+            </div>
+            
+            <form id="formRecordatorio" method="POST" class="auth-form rec-form" action="{% url 'recordatorio_create' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>🎯 Seleccionar actividad:</label>
+                    <select name="actividad" class="form-control" required>
+                        <option value="medicamento">Medicamento</option>
+                        <option value="cita">Cita médica</option>
+                        <option value="almuerzo">Almuerzo</option>
+                        <option value="paseo">Paseo</option>
+                        <option value="cena">Cena</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📅 Fecha:</label>
+                    <input type="date" name="fecha" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label>⏰ Hora:</label>
+                    <input type="time" name="hora" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label>📝 Notas:</label>
+                    <textarea name="notas" class="form-control" rows="4" placeholder="Notas opcionales"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>🔁 Frecuencia:</label>
+                    <select name="frecuencia" class="form-control" required>
+                        <option value="una_vez">Una vez</option>
+                        <option value="diario">Diario</option>
+                        <option value="semanal">Semanal</option>
+                    </select>
+                </div>
+
+                <div class="form-row-inline">
+                    <div class="form-group">
+                        <label>🔔 Alarma Activa</label>
+                    </div>
+                    <div class="form-group switch-wrap">
+                        <label class="switch">
+                          <input type="checkbox" name="alarma" checked>
+                          <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:1rem">
+                    <button type="submit" class="btn btn-primary btn-large">💾 Guardar recordatorio</button>
+                </div>
+            </form>
+            <div id="recMensajes" style="margin-top:1rem"></div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

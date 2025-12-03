@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="padding: 2rem; max-width: 800px; margin: 0 auto;">
+    <h2>📊 Reporte SQL Manual (Requisito Rúbrica)</h2>
+    <p>Datos obtenidos mediante <code>connection.cursor()</code> usando JOIN y WHERE.</p>
+    
+    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 1rem; background: white;">
+        <thead>
+            <tr style="background: #eee;">
+                <th style="padding: 8px;">Usuario (JOIN Auth_User)</th>
+                <th style="padding: 8px;">Actividad</th>
+                <th style="padding: 8px;">Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fila in data %}
+            <tr>
+                <td style="padding: 8px;">{{ fila.0 }}</td>
+                <td style="padding: 8px;">{{ fila.1 }}</td>
+                <td style="padding: 8px;">{{ fila.2 }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" style="padding: 8px; text-align: center;">No hay alarmas activas para mostrar.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div style="margin-top: 2rem;">
+        <a href="{% url 'dashboard' %}" class="btn btn-primary">⬅ Volver al Dashboard</a>
+    </div>
+</div>
+{% endblock %}

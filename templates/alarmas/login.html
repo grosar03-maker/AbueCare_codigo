@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>🔐 Iniciar Sesión</h2>
+        
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>👤 Nombre de usuario:</label>
+                <input type="text" name="username" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label>🔒 Contraseña:</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-large">🚀 Iniciar Sesión</button>
+        </form>
+
+        <div class="auth-links">
+            <p>¿No tienes cuenta? <a href="#">Regístrate aquí</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

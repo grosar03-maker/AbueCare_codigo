@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="dashboard">
+    <div class="welcome-section">
+        <h1>🎉 Bienvenid@, <strong>{{ nombre_saludo }}</strong> 💙</h1>
+        <p class="lead">Gestiona tus recordatorios diarios</p>
+        <div style="margin-top:1.5rem; text-align:center;">
+            
+            <a href="#" class="create-alarm" 
+               data-url="{% url 'recordatorio_create' %}" 
+               onclick="abrirRecordatorio(event, this.getAttribute('data-url'))">
+               ➕ Nuevo recordatorio
+            </a>
+
+        </div>
+    </div>
+
+    <div class="alarmas-grid">
+        {% for alarma in alarmas %}
+            <div class="alarma-card {% if alarma.actividad == 'paseo' %}ejercicio{% elif alarma.actividad == 'almuerzo' or alarma.actividad == 'cena' %}comida{% else %}{{ alarma.actividad }}{% endif %}">
+                
+                <div class="card-icon">
+                    {% if alarma.actividad == 'medicamento' %}💊
+                    {% elif alarma.actividad == 'cita' %}🏥
+                    {% elif alarma.actividad == 'paseo' %}🚶‍♂️
+                    {% elif alarma.actividad == 'almuerzo' or alarma.actividad == 'cena' %}🍽️
+                    {% else %}⏰{% endif %}
+                </div>
+
+                <h2 class="card-title">{{ alarma.get_actividad_display }}</h2>
+                
+                <p class="card-desc">
+                    {% if alarma.notas %} {{ alarma.notas }} {% else %} {{ alarma.fecha|date:"d M Y" }} {% endif %}
+                </p>
+                
+                <div class="card-time">⏰ {{ alarma.hora|time:"H:i" }}</div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                    <button class="btn" style="background: #e0e0e0; color: #333; flex:1;"
+                        onclick="editarRecordatorio(this)"
+                        data-url="{% url 'recordatorio_edit' alarma.id %}"
+                        data-actividad="{{ alarma.actividad }}"
+                        data-fecha="{{ alarma.fecha|date:'Y-m-d' }}"
+                        data-hora="{{ alarma.hora|time:'H:i' }}"
+                        data-notas="{{ alarma.notas }}"
+                        data-frecuencia="{{ alarma.frecuencia }}"
+                        data-alarma="{{ alarma.alarma|yesno:'true,false' }}">
+                        ✏️
+                    </button>
+                    
+                    <button class="btn" style="background: #ff6b6b; color: white; flex:1;"
+                        data-url="{% url 'recordatorio_delete' alarma.id %}"
+                        onclick="eliminarRecordatorio(this.getAttribute('data-url'))">
+                        🗑️
+                    </button>
+                </div>
+            </div>
+        {% empty %}
+            <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                <h3>📭 No tienes recordatorios pendientes</h3>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
